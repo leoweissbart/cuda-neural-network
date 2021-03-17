@@ -23,8 +23,8 @@ CU_DEPS += \
 src/layers/%.o: ../src/layers/%.cu
 	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Compiler'
-	/usr/local/cuda-10.0/bin/nvcc -G -g -O0 -gencode arch=compute_30,code=sm_30  -odir "src/layers" -M -o "$(@:%.o=%.d)" "$<"
-	/usr/local/cuda-10.0/bin/nvcc -G -g -O0 --compile --relocatable-device-code=true -gencode arch=compute_30,code=compute_30 -gencode arch=compute_30,code=sm_30  -x cu -o  "$@" "$<"
+	/usr/local/cuda-10.0/bin/nvcc -I/usr/local/cuda-10.0/include -G -g -O0 -ccbin aarch64-linux-gnu-g++ -gencode arch=compute_53,code=sm_53 -m64 -odir "src/layers" -M -o "$(@:%.o=%.d)" "$<"
+	/usr/local/cuda-10.0/bin/nvcc -I/usr/local/cuda-10.0/include -G -g -O0 -m64 -ccbin aarch64-linux-gnu-g++   "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

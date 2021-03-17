@@ -8,13 +8,10 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include subdir.mk
 -include src/nn_utils/subdir.mk
--include src/subdir.mk
 -include src/layers/subdir.mk
-
-OS_SUFFIX := $(subst Linux,linux,$(subst Darwin/x86_64,darwin,$(shell uname -s)/$(shell uname -m)))
-
+-include src/subdir.mk
+-include subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -43,14 +40,6 @@ endif
 
 -include ../makefile.defs
 
-# OpenGL+GLUT OS-specific define
-ifeq ($(shell uname -s),Darwin)
-GLUT_LIBS := -Xlinker -framework -Xlinker GLUT -Xlinker -framework -Xlinker OpenGL
-else
-GLUT_LIBS := -lGL -lGLU -lglut 
-endif
-
-
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
@@ -60,7 +49,7 @@ all: libcuda-neural-network
 libcuda-neural-network: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: NVCC Linker'
-	/usr/local/cuda-10.0/bin/nvcc --cudart static -shared --relocatable-device-code=true -gencode arch=compute_30,code=compute_30 -gencode arch=compute_30,code=sm_30 -link -o  "libcuda-neural-network" $(OBJS) $(USER_OBJS) $(LIBS)
+	/usr/local/cuda-10.0/bin/nvcc --cudart static -L/usr/local/cuda-10.0/samples/common/lib/linux/aarch64 -shared --relocatable-device-code=true -gencode arch=compute_53,code=compute_53 -gencode arch=compute_53,code=sm_53 -m64 -ccbin aarch64-linux-gnu-g++ -link -o  "libcuda-neural-network" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
