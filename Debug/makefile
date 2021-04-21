@@ -83,8 +83,8 @@ else ifneq ($(TARGET_ARCH),$(HOST_ARCH))
     endif
 endif
 HOST_COMPILER ?= g++
-CUDA_PATH = /usr/local/cuda-10.0
-NVCC          := $(CUDA_PATH)/bin/nvcc -ccbin $(HOST_COMPILER)
+CUDA_PATH = /usr/local/cuda-10.0/
+NVCC          := $(CUDA_PATH)bin/nvcc -ccbin $(HOST_COMPILER)
 
 # internal flags
 NVCCFLAGS   := -m${TARGET_SIZE}
@@ -93,7 +93,7 @@ LDFLAGS     :=
 
 # build flags
 ifeq ($(TARGET_OS),darwin)
-    LDFLAGS += -rpath $(CUDA_PATH)/lib
+    LDFLAGS += -rpath $(CUDA_PATH)lib
     CCFLAGS += -arch $(HOST_ARCH)
 else ifeq ($(HOST_ARCH)-$(TARGET_ARCH)-$(TARGET_OS),x86_64-armv7l-linux)
     LDFLAGS += --dynamic-linker=/lib/ld-linux-armhf.so.3
@@ -179,7 +179,7 @@ ALL_LDFLAGS += $(addprefix -Xlinker ,$(EXTRA_LDFLAGS))
 
 # Common includes and paths for CUDA
 INCLUDES  := -Iinc
-LIBRARIES := -I$(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)/include -L$(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)/lib64
+LIBRARIES := -I$(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)include -L$(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)lib64
 
 ################################################################################
 
