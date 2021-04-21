@@ -179,7 +179,7 @@ ALL_LDFLAGS += $(addprefix -Xlinker ,$(EXTRA_LDFLAGS))
 
 # Common includes and paths for CUDA
 INCLUDES  := -Iinc
-LIBRARIES :=
+LIBRARIES := -I$(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)/include -L$(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)/lib64
 
 ################################################################################
 
@@ -227,7 +227,8 @@ SOURCEDIRS = $(foreach dir, $(DIRS), $(addprefix $(SOURCEDIR)/, $(dir)))
 TARGET_DIRS = $(foreach dir, $(DIRS), $(addprefix $(BUILDDIR)/, $(dir)))
 
 # Generate the GCC includes parameters by adding -I before each source folder
-INCLUDES = $(foreach dir, $(SOURCEDIRS), $(addprefix -I, $(dir)))
+INCLUDES += $(foreach dir, $(SOURCEDIRS), $(addprefix -I, $(dir)))
+INCLUDES += -I $(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)/include
 
 # Add this list to VPATH, the place make will look for the source files
 VPATH = $(SOURCEDIRS)
