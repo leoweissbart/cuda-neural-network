@@ -18,9 +18,11 @@ void NeuralNetwork::addLayer(NNLayer* layer) {
 Matrix NeuralNetwork::forward(Matrix X) {
 	Matrix Z = X;
 
+	// gpioSetValue(trigger,on);
 	for (auto layer : layers) {
 		Z = layer->forward(Z);
 	}
+	// gpioSetValue(trigger,off);
 
 	Y = Z;
 	return Y;

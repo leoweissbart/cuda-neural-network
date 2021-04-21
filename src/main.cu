@@ -9,12 +9,17 @@
 #include "nn_utils/bce_cost.hh"
 
 #include "coordinates_dataset.hh"
+#include "gpio/jetsonGPIO.hh"
 
 float computeAccuracy(const Matrix& predictions, const Matrix& targets);
 
 int main() {
 
 	srand( time(NULL) );
+
+	jetsonTX1GPIONumber trigger = gpio79;//Jetson nano have a J41 header. gpio79 is pin number 12 on the board
+	gpioExport(trigger);
+	gpioSetDirection(trigger,outputPin);
 
 	CoordinatesDataset dataset(100, 21);
 	BCECost bce_cost;
@@ -44,7 +49,9 @@ int main() {
 	}
 
 	// compute accuracy
+	gpioSetValue(trigger,on);
 	Y = nn.forward(dataset.getBatches().at(dataset.getNumOfBatches() - 1));
+	gpioSetValue(trigger,off);
 	Y.copyDeviceToHost();
 
 	float accuracy = computeAccuracy(

@@ -274,7 +274,7 @@ directories:
 
 # Other Targets
 clean:
-	rm -rf $(TARGET_DIRS)
+	rm -rf nn_utils layers gpio
 	rm -rf $(TARGET)
 	-@echo ' '
 
