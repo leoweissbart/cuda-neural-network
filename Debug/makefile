@@ -2,10 +2,6 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
--include ../makefile.init
-
-RM := rm -rf
-
 # architecture
 HOST_ARCH   := $(shell uname -m)
 TARGET_ARCH ?= $(HOST_ARCH)
@@ -82,9 +78,10 @@ else ifneq ($(TARGET_ARCH),$(HOST_ARCH))
         HOST_COMPILER ?= powerpc64le-linux-gnu-g++
     endif
 endif
-HOST_COMPILER ?= g++
-CUDA_PATH = /usr/local/cuda-10.0/
-NVCC          := $(CUDA_PATH)bin/nvcc -ccbin $(HOST_COMPILER)
+
+HOST_COMPILER	?= g++
+CUDA_PATH		?= /usr/local/cuda-10.0/
+NVCC			:= $(CUDA_PATH)bin/nvcc -ccbin $(HOST_COMPILER)
 
 # internal flags
 NVCCFLAGS   := -m${TARGET_SIZE}
@@ -139,7 +136,6 @@ ifeq ($(TARGET_OS),qnx)
 endif
 
 # Install directory of different arch
-CUDA_INSTALL_TARGET_DIR :=
 ifeq ($(TARGET_ARCH)-$(TARGET_OS),armv7l-linux)
     CUDA_INSTALL_TARGET_DIR = targets/armv7-linux-gnueabihf/
 else ifeq ($(TARGET_ARCH)-$(TARGET_OS),aarch64-linux)
@@ -216,7 +212,6 @@ endif
 PROJDIR := $(realpath $(CURDIR)/..)
 SOURCEDIR := $(PROJDIR)/src
 BUILDDIR := $(PROJDIR)/Debug
-SEP=/
 
 # Name of the final executable
 TARGET = cuda-neural-network
@@ -243,7 +238,7 @@ OBJS := $(subst $(SOURCEDIR),$(BUILDDIR),$(SOURCES:.cu=.o))
 DEPS = $(OBJS:.o=.d)
 
 # Remove space after separator
-PSEP = $(strip $(SEP))
+PSEP = $(strip /)
 
 # Define the function that will generate each rule
 
@@ -277,6 +272,7 @@ directories:
 clean:
 	rm -rf nn_utils layers gpio
 	rm -rf $(TARGET)
+	rm -rf *.o
 	-@echo ' '
 
 clobber: clean
