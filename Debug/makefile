@@ -1,5 +1,5 @@
 ################################################################################
-# Automatically-generated file. Do not edit!
+# 
 ################################################################################
 
 # architecture
@@ -223,7 +223,7 @@ TARGET_DIRS = $(foreach dir, $(DIRS), $(addprefix $(BUILDDIR)/, $(dir)))
 
 # Generate the GCC includes parameters by adding -I before each source folder
 INCLUDES += $(foreach dir, $(SOURCEDIRS), $(addprefix -I, $(dir)))
-INCLUDES += -I $(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)/include
+INCLUDES += -I$(CUDA_PATH)$(CUDA_INSTALL_TARGET_DIR)/include
 
 # Add this list to VPATH, the place make will look for the source files
 VPATH = $(SOURCEDIRS)
@@ -234,22 +234,15 @@ SOURCES = $(foreach dir,$(SOURCEDIRS),$(wildcard $(dir)/*.cu))
 # Define objects for all sources
 OBJS := $(subst $(SOURCEDIR),$(BUILDDIR),$(SOURCES:.cu=.o))
 
-# Define dependencies files for all objects
-DEPS = $(OBJS:.o=.d)
-
 # Remove space after separator
 PSEP = $(strip /)
 
 # Define the function that will generate each rule
-
 define generateRules
 $(1)/%.o: %.cu
 	@echo 'Building target $$@'
 	$(EXEC)$(NVCC) $$(INCLUDES) $$(ALL_CCFLAGS) $$(GENCODE_FLAGS) -o $$(subst /,$$(PSEP),$$@) -c $$(subst /,$$(PSEP),$$<)
 endef
-
-.PHONY: all clean directories 
-# Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
 all: directories $(TARGET)
@@ -259,16 +252,14 @@ $(TARGET): $(OBJS)
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 	$(EXEC) $(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 
-# Include dependencies
--include $(DEPS)
 
+#Create rule for each TARGET_DIRS
 $(foreach targetdir, $(TARGET_DIRS), $(eval $(call generateRules, $(targetdir))))
 
 directories:
-	@echo $(NVCC)
 	mkdir -p $(TARGET_DIRS)
 
-# Other Targets
+
 clean:
 	rm -rf nn_utils layers gpio
 	rm -rf $(TARGET)
@@ -278,6 +269,6 @@ clean:
 clobber: clean
 
 
-.PHONY: all clean dependents
+.PHONY: all clean directories 
 .SECONDARY:
 
