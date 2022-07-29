@@ -1,3 +1,4 @@
+// Based on https://github.com/pwlnk/cuda-neural-network 
 #include "neural_network.hh"
 #include "nn_utils/nn_exception.hh"
 
